@@ -18,7 +18,7 @@ namespace TheGame
     public interface IModule
     {
         bool IsBusy { get; }
-        void TryGetModule(int id, Action onSuccess, Action onFail);
+        bool TryGetModule(int id);
         void LeaveModule();
     }
 }

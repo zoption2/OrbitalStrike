@@ -64,13 +64,7 @@ namespace TheGame
                 {
                     if (aimPositions[i].IsReady)
                     {
-                        var settings = new PoolableSettings(info.WeaponType
-                                                            , identifiers
-                                                            , aimPositions[i].Aim.position
-                                                            , aimPositions[i].Aim.rotation
-                                                            , info.projectilePrefab);
-
-                        aimPositions[i].Launch(settings);
+                        aimPositions[i].Launch(identifiers, info.WeaponType, aimPositions[i].Aim.position, aimPositions[i].Aim.rotation, info.projectilePrefab);
                         canShot = false;
                         break;
                     }

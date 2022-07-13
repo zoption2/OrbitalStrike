@@ -9,15 +9,9 @@ namespace TheGame
         [SerializeField] private TargetDetector detector;
         public override Enum WeaponType => RocketType.autoAimAntiShip;
 
-        public override void OnCreate(IIdentifiers identifiers)
+        public override void Initialize(IIdentifiers identifiers)
         {
-            base.OnCreate(identifiers);
-            detector.Init(identifiers, fixedUpdateProvider);
-        }
-
-        public override void OnRestore(IIdentifiers identifiers)
-        {
-            base.OnRestore(identifiers);
+            base.Initialize(identifiers);
             detector.Init(identifiers, fixedUpdateProvider);
         }
 

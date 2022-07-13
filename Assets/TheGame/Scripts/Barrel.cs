@@ -56,9 +56,10 @@ namespace TheGame
             IsReady = false;
         }
 
-        public void Launch(ISettings settings)
+        public void Launch(IIdentifiers identifiers, System.Enum name, Vector2 position, Quaternion rotation, IPoolable prefab)
         {
-            pool.Get(settings);
+            var projectile = (IProjectiles)pool.Get(name, position, rotation, prefab);
+            projectile.Initialize(identifiers);
             SpriteRenderer.enabled = false;
             IsEmpty = true;
             IsReady = false;

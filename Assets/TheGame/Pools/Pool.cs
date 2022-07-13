@@ -32,7 +32,7 @@ namespace TheGame
             }
         }
 
-        public IPoolable Get(IIdentifiers identifiers, Vector3 position, Quaternion rotation)
+        public IPoolable Get(Vector3 position, Quaternion rotation)
         {
             IPoolable result;
             if (pool.Count > 0)
@@ -40,13 +40,13 @@ namespace TheGame
                 result = pool.Pop();
                 result.transform.SetPositionAndRotation(position, rotation);
                 result.gameObject.SetActive(true);
-                result.OnRestore(identifiers);
+                result.OnRestore();
             }
             else
             {
                 var go = instantiator.CreateObject(referance, position, rotation, PoolHolder.transform);
                 result = go.GetComponent<IPoolable>();
-                result.OnCreate(identifiers);
+                result.OnCreate();
             }
             return result;
         }

@@ -10,9 +10,10 @@ namespace TheGame
         [SerializeField] private TrailRenderer trailRenderer;
         public override Enum WeaponType => MachineGunType.simpleGun;
 
-        public override void OnRestore(IIdentifiers identifiers)
+
+        public override void OnRestore()
         {
-            base.OnRestore(identifiers);
+            base.OnRestore();
             trailRenderer.Clear();
             trailRenderer.enabled = true;
         }

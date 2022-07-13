@@ -5,7 +5,7 @@ using Zenject;
 
 namespace TheGame
 {
-    public abstract class Ship : MonoBehaviour, ITargetable, IPoolable, IModule
+    public abstract class Ship : MonoBehaviour, ITargetable, IShip, IModule
     {
         [SerializeField] protected Health health;
         [SerializeField] protected Rotation rotation;
@@ -27,8 +27,6 @@ namespace TheGame
             this.playersService = playersService;
         }
 
-        protected abstract void Init();
-
         public ITargetable GetTarget()
         {
             return this;
@@ -39,18 +37,20 @@ namespace TheGame
             //notify
         }
 
-        public void OnCreate(IIdentifiers identifiers)
+        public virtual void Initialize(IIdentifiers identifiers, IControl control)
         {
             this.identifiers = identifiers;
-            control = controlFactory.Get(identifiers);
-            Init();
+            this.control = control;
         }
 
-        public void OnRestore(IIdentifiers identifiers)
+        public void OnCreate()
         {
-            this.identifiers = identifiers;
-            control = controlFactory.Get(identifiers);
-            Init();
+            //control = controlFactory.Get(identifiers);
+        }
+
+        public void OnRestore()
+        {
+            //control = controlFactory.Get(identifiers);
         }
 
         public void OnStore()
@@ -58,13 +58,14 @@ namespace TheGame
             control.Disable();
         }
 
-        public void TryGetModule(int id, Action onSuccess, Action onFail)
+        public bool TryGetModule(int id)
         {
             if (IsBusy)
             {
-                onFail?.Invoke();
+                return false;
             }
             IsBusy = true;
+            return true;
         }
 
         public void LeaveModule()

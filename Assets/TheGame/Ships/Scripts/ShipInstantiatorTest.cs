@@ -9,6 +9,7 @@ namespace TheGame
         [Inject] private IShipFactory shipFactory;
         [Inject] private IPoolController pool;
         [Inject] private IPlayersService playersService;
+        [Inject] private IControlFactory controlFactory;
         private CameraController[] cameraController = new CameraController[2];
 
         [Inject]
@@ -26,16 +27,11 @@ namespace TheGame
             for (int i = 0; i < setti.Players; i++)
             {
                 var newShip = shipFactory.TryGetPrefab(ShipType.jetFighter, OnSuccess, OnFail);
-
                 playersService.AddPlayer(i, out IIdentifiers identifiers);
-                var settings = new PoolableSettings(ShipType.jetFighter
-                                    , identifiers
-                                    , Vector2.zero
-                                    , Quaternion.identity
-                                    , newShip);
-                var poolable = pool.Get(settings);
+                IShip poolable = (IShip)pool.Get(ShipType.jetFighter, Vector2.zero, Quaternion.identity, newShip);
+                var control = controlFactory.Get(identifiers);
+                poolable.Initialize(identifiers, control);
                 cameraController[i].Init(poolable.transform, setti.Players, i + 1);
-
 
                 void OnSuccess(Ship ship)
                 {

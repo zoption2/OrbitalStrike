@@ -51,12 +51,8 @@ namespace TheGame
                 {
                     if (ammo > 0)
                     {
-                        var settings = new PoolableSettings(info.WeaponType
-                                                            , identifiers
-                                                            , aimPositions[i].position
-                                                            , aimPositions[i].rotation
-                                                            , info.projectilePrefab);
-                        pool.Get(settings);
+                        var projectile = (IProjectiles) pool.Get(info.WeaponType, aimPositions[i].position, aimPositions[i].rotation, info.projectilePrefab);
+                        projectile.Initialize(identifiers);
                         ammo--;
                     }
                     else break;

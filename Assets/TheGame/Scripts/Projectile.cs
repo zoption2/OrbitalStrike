@@ -8,7 +8,7 @@ namespace TheGame
 {
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Rigidbody2D))]
-    public abstract class Projectile : MonoBehaviour, IPoolable, IGlobalFixedUpdateObserver, IGlobalUpdateObserver
+    public abstract class Projectile : MonoBehaviour, IProjectiles, IGlobalFixedUpdateObserver, IGlobalUpdateObserver
     {
         [field: SerializeField] public float speed { get; private set; } = 10;
         [field: SerializeField] public float damage { get; private set; } = 1;
@@ -75,22 +75,22 @@ namespace TheGame
             Release();
         }
 
-        public virtual void OnCreate(IIdentifiers identifiers)
+        public virtual void Initialize(IIdentifiers identifiers)
         {
             this.identifiers = identifiers;
-            currentLifetime = lifetime;
             fixedUpdateProvider.Add(this);
             updateProvider.Add(this);
             myCollider.enabled = true;
         }
 
-        public virtual void OnRestore(IIdentifiers identifiers)
+        public virtual void OnCreate()
         {
-            this.identifiers = identifiers;
             currentLifetime = lifetime;
-            fixedUpdateProvider.Add(this);
-            updateProvider.Add(this);
-            myCollider.enabled = true;
+        }
+
+        public virtual void OnRestore()
+        {
+            currentLifetime = lifetime;
         }
 
         public virtual void OnStore()

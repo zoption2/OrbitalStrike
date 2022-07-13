@@ -7,7 +7,7 @@ namespace TheGame
 {
     public interface IPoolController
     {
-        IPoolable Get(ISettings settings);
+        IPoolable Get(Enum name, Vector2 position, Quaternion rotation, IPoolable prefab);
         void Release(Enum args, IPoolable poolable);
     }
 
@@ -17,15 +17,15 @@ namespace TheGame
 
         [Inject] private Pool.Factory poolFactory;
 
-        public IPoolable Get(ISettings settings)
+        public IPoolable Get(Enum name, Vector2 position, Quaternion rotation, IPoolable prefab)
         {
-            if (!pools.ContainsKey(settings.Name))
+            if (!pools.ContainsKey(name))
             {
-                var pool = poolFactory.Create(settings.Referance);
-                pools.Add(settings.Name, pool);
+                var pool = poolFactory.Create(prefab);
+                pools.Add(name, pool);
             }
 
-            var poolable = pools[settings.Name].Get(settings.Identifiers, settings.Position, settings.Rotation);
+            var poolable = pools[name].Get(position, rotation);
             return poolable;
         }
 
