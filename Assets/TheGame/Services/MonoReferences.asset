@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa7fce0d334a0784eafd5ff950f5c6a1, type: 3}
+  m_Name: MonoReferences
+  m_EditorClassIdentifier: 
+  <ShipFactory>k__BackingField: {fileID: -2488372868829824634, guid: fc11533eadbdc28469f1795371fb624e, type: 3}
+  <PlayerCamera>k__BackingField: {fileID: 3641305235083388839, guid: b4f1744f36d5802478d9d99e1ec0ed39, type: 3}
+  <MachineGunFactory>k__BackingField: {fileID: -6811941072256294150, guid: 341e69bf204db964ab24ebb98d1060b4, type: 3}
+  <RocketFactory>k__BackingField: {fileID: -2785328988864859268, guid: 4f1158d236e133f4896477e56a2d82bf, type: 3}

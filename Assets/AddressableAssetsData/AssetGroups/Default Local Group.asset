@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: eb27a5dd8ac863845aedcdef2cd3c274
+  m_SerializeEntries:
+  - m_GUID: 7e3f2fae621e9bf48b8e27a4181d34e5
+    m_Address: Assets/TheGame/Ships/Prefabs/JetFighterShip.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5f1e4aedbccdaaf4ab7a90c80e6b258d
+    m_Address: Assets/TheGame/Weapon/Info/AutoAimAntishipRocket.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 4f935bdf5255f894380ff3185f0e4dbd
+    m_Address: Assets/TheGame/Weapon/Info/SimpleGun.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 7f5f18d878678844586d33f1d2ce3a1d
+    m_Address: Assets/TheGame/Weapon/Projectiles/Rocket.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 8a6cc09ad4bd0374588cbc32bc85f145, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: ccc048916e2aa9345ba3a0b650783f43, type: 2}
+    - {fileID: 11400000, guid: 9df61c81893e1014495e7efe45248377, type: 2}
