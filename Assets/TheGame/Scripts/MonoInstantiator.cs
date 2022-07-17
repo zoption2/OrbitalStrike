@@ -9,6 +9,7 @@ namespace TheGame
     {
         GameObject CreateObject(IPoolable referance, Vector2 position, Quaternion rotation, Transform parent);
         GameObject CreateObject(GameObject prefab, Transform parent);
+        GameObject CreateObject<T>(T prefab) where T : UnityEngine.Object;
         Coroutine StartCoroutine(IEnumerator routine);
     }
 
@@ -16,15 +17,21 @@ namespace TheGame
     {
         [Inject] private DiContainer container;
 
-        public GameObject CreateObject(IPoolable referance, Vector2 position, Quaternion rotation, Transform parent)
+        public GameObject CreateObject (IPoolable referance, Vector2 position, Quaternion rotation, Transform parent)
         {
-            var newGO = container.InstantiatePrefab(referance.gameObject,position, rotation, parent);
+            var newGO = container.InstantiatePrefab(referance.gameObject, position, rotation, parent);
             return newGO;
         }
 
         public GameObject CreateObject(GameObject prefab, Transform parent)
         {
             var newGO = container.InstantiatePrefab(prefab, parent.position, parent.rotation, parent);
+            return newGO;
+        }
+
+        public GameObject CreateObject<T>(T prefab) where T : UnityEngine.Object
+        {
+            var newGO = container.InstantiatePrefab(prefab);
             return newGO;
         }
     }

@@ -5,10 +5,11 @@ using Zenject;
 
 namespace TheGame
 {
-    public abstract class Ship : MonoBehaviour, ITargetable, IShip, IModule
+    public abstract class Ship : MonoBehaviour, ITargetable, IModule
     {
         [SerializeField] protected Health health;
         [SerializeField] protected Rotation rotation;
+        [field: SerializeField] public ModuleInfo Info { get; private set; }
 
         protected IIdentifiers identifiers;
         protected IControl control;
@@ -17,7 +18,7 @@ namespace TheGame
 
         public int TeamID { get => identifiers.TeamID; }
         public abstract ShipType ShipType { get; }
-        public bool IsBusy { get; private set; }
+        protected bool isMobuleBusy;
 
 
         [Inject]
@@ -25,6 +26,11 @@ namespace TheGame
         {
             this.controlFactory = controlFactory;
             this.playersService = playersService;
+        }
+
+        public bool IsAvailable()
+        {
+            return isMobuleBusy;
         }
 
         public ITargetable GetTarget()
@@ -37,40 +43,32 @@ namespace TheGame
             //notify
         }
 
-        public virtual void Initialize(IIdentifiers identifiers, IControl control)
+        public virtual void InitModule(Player player)
         {
-            this.identifiers = identifiers;
-            this.control = control;
+            identifiers = player.identifiers;
+            control = player.control;
+            isMobuleBusy = true;
         }
 
-        public void OnCreate()
-        {
-            //control = controlFactory.Get(identifiers);
-        }
 
-        public void OnRestore()
+        public virtual void OnCreate()
         {
             //control = controlFactory.Get(identifiers);
         }
 
-        public void OnStore()
+        public virtual void OnRestore()
+        {
+            //control = controlFactory.Get(identifiers);
+        }
+
+        public virtual void OnStore()
         {
             control.Disable();
         }
 
-        public bool TryGetModule(int id)
+        public virtual void LeaveModule(Player identifiers)
         {
-            if (IsBusy)
-            {
-                return false;
-            }
-            IsBusy = true;
-            return true;
-        }
-
-        public void LeaveModule()
-        {
-            IsBusy = false;
+            isMobuleBusy = false;
         }
     }
 
@@ -103,7 +101,8 @@ namespace TheGame
 
     public enum ShipType
     {
-        jetFighter = 0
+        jetFighter = 0,
+        mothership = 1000
     }
 
 
@@ -118,7 +117,15 @@ namespace TheGame
         public ControlEvent<RoutinePhase> OnBreaks { get;}
         public ControlEvent<RoutinePhase> OnTraps { get;}
 
+        public ControlEvent<RoutinePhase> OnDownPressed { get; }
+        public ControlEvent<RoutinePhase> OnUpPressed { get; }
+
         public void Disable();
+    }
+
+    public interface IMothershipComponent
+    {
+        void SetUI(MothershipUI ui);
     }
 }
 

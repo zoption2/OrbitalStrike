@@ -33,6 +33,10 @@ MonoBehaviour:
     m_Address: Assets/TheGame/Weapon/Projectiles/Rocket.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 8e6849886c3ff4d4f864bcf1191e8f5b
+    m_Address: Assets/TheGame/Ships/Prefabs/Mothership.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8a6cc09ad4bd0374588cbc32bc85f145, type: 2}
   m_SchemaSet:

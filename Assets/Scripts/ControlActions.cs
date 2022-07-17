@@ -32,6 +32,12 @@ namespace TheGame
         public event Action OnTrapsComplete;
 
 
+        public event Action OnMoveUpPressed;
+        public event Action OnMoveDownPressed;
+        public event Action OnEnterPressed;
+        public event Action OnBackPressed;
+
+
         public InputAction PrimeWeaponAction { get; private set; }
         public InputAction SecondaryWeaponAction { get; private set; }
         public InputAction AdvancedAction { get; private set; }
@@ -41,6 +47,11 @@ namespace TheGame
         public InputAction TurboAction { get; private set; }
         public InputAction TrapsAction { get; private set; }
 
+        public InputAction MoveUp { get; private set; }
+        public InputAction MoveDown { get; private set; }
+        public InputAction Enter { get; private set; }
+        public InputAction Back { get; private set; }
+
         private const string rotation = "Rotation";
         private const string aim = "Aim";
         private const string advanced = "Advanced";
@@ -49,6 +60,11 @@ namespace TheGame
         private const string turbo = "Turbo";
         private const string breaks = "Breaks";
         private const string traps = "Traps";
+
+        private const string moveUp = "MoveUp";
+        private const string moveDown = "MoveDown";
+        private const string enter = "Enter";
+        private const string back = "Back";
 
         public ControlActions(PlayerInput input)
         {
@@ -96,6 +112,23 @@ namespace TheGame
             TrapsAction.started += ctx => OnTrapsStart?.Invoke();
             TrapsAction.canceled += ctx => OnTrapsComplete?.Invoke();
             TrapsAction.Enable();
+
+
+            MoveUp = Input.actions[moveUp];
+            MoveUp.started += ctx => OnMoveUpPressed?.Invoke();
+            MoveUp.Enable();
+
+            MoveDown = Input.actions[moveDown];
+            MoveDown.started += ctx => OnMoveDownPressed?.Invoke();
+            MoveDown.Enable();
+
+            Enter = Input.actions[enter];
+            Enter.started += ctx => OnEnterPressed?.Invoke();
+            Enter.Enable();
+
+            Back = Input.actions[back];
+            Back.started += ctx => OnBackPressed?.Invoke();
+            Back.Enable();
         }
     }
 }

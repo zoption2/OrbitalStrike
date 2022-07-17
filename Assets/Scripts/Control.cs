@@ -22,6 +22,9 @@ namespace TheGame
         private ControlledRoutine controlledBreaks;
         private ControlledRoutine controlledTraps;
 
+        private ControlledRoutine controlledDownPressed;
+        private ControlledRoutine controlledUpPressed;
+
         private ControlledRoutine.Factory factory;
 
         public ControlEvent<Vector2, RoutinePhase> OnRotation { get; } = new ControlEvent<Vector2, RoutinePhase>();
@@ -32,6 +35,9 @@ namespace TheGame
         public ControlEvent<RoutinePhase> OnTurbo { get; } = new ControlEvent<RoutinePhase>();
         public ControlEvent<RoutinePhase> OnBreaks { get; } = new ControlEvent<RoutinePhase>();
         public ControlEvent<RoutinePhase> OnTraps { get; } = new ControlEvent<RoutinePhase>();
+
+        public ControlEvent<RoutinePhase> OnUpPressed { get; } = new ControlEvent<RoutinePhase>();
+        public ControlEvent<RoutinePhase> OnDownPressed { get; } = new ControlEvent<RoutinePhase>();
 
 
         public Control(int id, ControlledRoutine.Factory factory)
@@ -55,6 +61,9 @@ namespace TheGame
                 controlledBreaks = factory.Create(UseBreaks);
                 controlledTraps = factory.Create(UseTraps);
                 controlledTurbo = factory.Create(UseTurbo);
+
+                controlledUpPressed = factory.Create(MoveUp);
+                controlledDownPressed = factory.Create(MoveDown);
 
                 SubscribeActions();
             }
@@ -104,6 +113,17 @@ namespace TheGame
         {
             OnBreaks.action?.Invoke(phase);
         }
+
+        private void MoveUp(RoutinePhase phase)
+        {
+            OnUpPressed.action?.Invoke(phase);
+        }
+
+        private void MoveDown(RoutinePhase phase)
+        {
+            OnDownPressed.action?.Invoke(phase);
+        }
+
 
         private void SubscribeActions()
         {

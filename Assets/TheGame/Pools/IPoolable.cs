@@ -12,10 +12,16 @@ namespace TheGame
         void OnStore();
     }
 
-    public interface IShip : IPoolable
+    public interface IMothership : IPoolable
     {
-        void Initialize(IIdentifiers identifiers, IControl control);
+        IModule CaptainsBridge { get; }
+        IModule Lobby { get; }
     }
+
+    //public interface IShip : IPoolable
+    //{
+    //    void Initialize(IIdentifiers identifiers, IControl control);
+    //}
 
     public interface IProjectiles : IPoolable
     {

@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2244f1ebf19d40543afa79d744e4d00a, type: 3}
-  m_Name: IngameSettings
+  m_Script: {fileID: 11500000, guid: c96d9be63d0baf349ab8b6bf43d05025, type: 3}
+  m_Name: PrefabReferenceHolder
   m_EditorClassIdentifier: 
-  <Players>k__BackingField: 2
-  <ScreenPosition>k__BackingField: 0
+  <Player>k__BackingField: {fileID: 7436787339864012366, guid: b4f1744f36d5802478d9d99e1ec0ed39, type: 3}

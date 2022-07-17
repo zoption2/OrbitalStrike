@@ -10,5 +10,6 @@ namespace TheGame
         [field: SerializeField] public CameraController PlayerCamera { get; private set; }
         [field: SerializeField] public MachineGunFactory MachineGunFactory { get; private set; }
         [field: SerializeField] public RocketFactory RocketFactory { get; private set; }
+        [field: SerializeField] public PrefabReferanceHolder prefabHolder { get; private set; }
     }
 }

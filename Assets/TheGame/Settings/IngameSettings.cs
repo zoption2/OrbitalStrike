@@ -4,11 +4,15 @@ using UnityEngine;
 
 namespace TheGame
 {
-    [CreateAssetMenu(fileName = "IngameSettings", menuName = "ScriptableObjects/IngameSettings")]
-    public class IngameSettings : ScriptableObject
+    public class IngameSettings : IGameSettings
     {
-        [field: SerializeField] public int Players { get; set; } = 1;
-        [field: SerializeField] public SplitScreenPosition ScreenPosition { get; set; } = SplitScreenPosition.horizontal; 
+        public int TotalPlayers { get; set; } = 1;
+        public SplitScreenPosition ScreenPosition { get; set; } = SplitScreenPosition.horizontal; 
+    }
+
+    public interface IGameSettings
+    {
+        int TotalPlayers { get; set; }
     }
 
     public enum SplitScreenPosition

@@ -16,3 +16,4 @@ MonoBehaviour:
   <PlayerCamera>k__BackingField: {fileID: 3641305235083388839, guid: b4f1744f36d5802478d9d99e1ec0ed39, type: 3}
   <MachineGunFactory>k__BackingField: {fileID: -6811941072256294150, guid: 341e69bf204db964ab24ebb98d1060b4, type: 3}
   <RocketFactory>k__BackingField: {fileID: -2785328988864859268, guid: 4f1158d236e133f4896477e56a2d82bf, type: 3}
+  <prefabHolder>k__BackingField: {fileID: 11400000, guid: 897a917ae9eb2ed4ea2829569bcb8363, type: 2}

@@ -9,9 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 983307658558308393}
+  - component: {fileID: 7436787339864012366}
   - component: {fileID: 3641305235083388839}
+  - component: {fileID: 3655091599435971393}
   m_Layer: 0
-  m_Name: PlayerCamera
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,6 +37,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7436787339864012366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983307658558308398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2942ed81a6e2f0f428aa990948b3e608, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraController: {fileID: 3641305235083388839}
 --- !u!114 &3641305235083388839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48,7 +63,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playCamera: {fileID: 983307660401930216}
+  canvas: {fileID: 983307660063750913}
   virtualCamera: {fileID: 983307660368372706}
+--- !u!114 &3655091599435971393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983307658558308398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 7bdb9c835e5cbc24084451e0aa3b0bab, type: 3}
+  m_NotificationBehavior: 3
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Gamepad
+  m_DefaultActionMap: ShipControl
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &983307659440908026
 GameObject:
   m_ObjectHideFlags: 0

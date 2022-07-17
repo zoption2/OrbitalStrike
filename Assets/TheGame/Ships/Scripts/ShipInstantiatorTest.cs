@@ -5,43 +5,42 @@ namespace TheGame
 {
     public class ShipInstantiatorTest : MonoBehaviour
     {
-        [SerializeField] private IngameSettings setti;
+        [Inject] private IGameSettings setti;
         [Inject] private IShipFactory shipFactory;
         [Inject] private IPoolController pool;
         [Inject] private IPlayersService playersService;
         [Inject] private IControlFactory controlFactory;
-        private CameraController[] cameraController = new CameraController[2];
-
-        [Inject]
-        private void Constructor(CameraController controller1, CameraController controller2)
-        {
-            cameraController[0] = controller1;
-            cameraController[1] = controller2;
-        }
 
         private async void Start()
         {
-            var waiter = shipFactory.Preload(ShipType.jetFighter);
+            setti.TotalPlayers = 2;
+            playersService.Initialize(setti.TotalPlayers, 1);
+
+            //var waiter = shipFactory.Preload(ShipType.jetFighter);
+            var waiter = shipFactory.Preload(ShipType.mothership);
             await waiter;
 
-            for (int i = 0; i < setti.Players; i++)
+            var newShip = shipFactory.TryGetPrefab(ShipType.mothership, null);
+            IMothership mothership = (IMothership)pool.Get(ShipType.mothership, Vector2.zero, Quaternion.identity, newShip);
+
+            for (int i = 0; i < setti.TotalPlayers; i++)
             {
-                var newShip = shipFactory.TryGetPrefab(ShipType.jetFighter, OnSuccess, OnFail);
+
                 playersService.AddPlayer(i, out IIdentifiers identifiers);
-                IShip poolable = (IShip)pool.Get(ShipType.jetFighter, Vector2.zero, Quaternion.identity, newShip);
-                var control = controlFactory.Get(identifiers);
-                poolable.Initialize(identifiers, control);
-                cameraController[i].Init(poolable.transform, setti.Players, i + 1);
+                var service = playersService.GetData(identifiers.ID);
 
-                void OnSuccess(Ship ship)
-                {
+                mothership.Lobby.InitModule(service);
+                service.cameraController.SwitchTarget(mothership.transform);
 
-                }
+                //void OnSuccess(Ship ship)
+                //{
 
-                void OnFail()
-                {
-                    Debug.LogError("Vse poshlo po pizde, bratuha");
-                }
+                //}
+
+                //void OnFail()
+                //{
+                //    Debug.LogError("Vse poshlo po pizde, bratuha");
+                //}
             }
         }
     }
