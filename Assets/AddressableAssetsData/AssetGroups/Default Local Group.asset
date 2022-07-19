@@ -37,6 +37,10 @@ MonoBehaviour:
     m_Address: Assets/TheGame/Ships/Prefabs/Mothership.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 6f28ee43589f5ac498cc2ab999f39962
+    m_Address: Assets/TheGame/UI/Mothership/Prefab/MothershipUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8a6cc09ad4bd0374588cbc32bc85f145, type: 2}
   m_SchemaSet:

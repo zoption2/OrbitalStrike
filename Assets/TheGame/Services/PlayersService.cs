@@ -7,11 +7,11 @@ namespace TheGame
     public class PlayersService : IPlayersService
     {
         [Inject] private IPlayerFactory playerFactory;
-        [Inject] private IControlFactory controlFactory;
+        
 
-        private readonly Dictionary<int, Player> data = new Dictionary<int, Player>();
+        private readonly Dictionary<int, IPlayer> data = new Dictionary<int, IPlayer>();
         private int availableID = 0;
-        private int currentPlayers = 0;
+        private int currentPlayers = 1;
         private int expectedPlayers = 1;
         private int playerTeams = 1;
 
@@ -21,18 +21,17 @@ namespace TheGame
             this.playerTeams = playerTeams;
         }
 
-        public void AddPlayer(int teamID, out IIdentifiers identifiers)
+        public IPlayer AddPlayer(int teamID, out IIdentifiers identifiers)
         {
             identifiers = new Identifiers(availableID, teamID);
-            var player = playerFactory.Get(identifiers);
+            var player = playerFactory.Get(identifiers, expectedPlayers, currentPlayers);
             data.Add(availableID, player);
             currentPlayers++;
             availableID++;
-            player.control = controlFactory.Get(identifiers);
-            player.cameraController.Init(null, expectedPlayers, currentPlayers);
+            return player;
         }
 
-        public Player GetData(int id)
+        public IPlayer GetData(int id)
         {
             if (data.ContainsKey(id))
             {
@@ -50,14 +49,6 @@ namespace TheGame
             }
         }
 
-        public void SetCameraController(int id, CameraController camera)
-        {
-            if (data.ContainsKey(id))
-            {
-                data[id].cameraController = camera;
-            }
-        }
-
         public void Clear()
         {
             //save players progress
@@ -69,8 +60,8 @@ namespace TheGame
     public interface IPlayersService
     {
         void Initialize(int totalPlayers, int playerTeams);
-        void AddPlayer(int teamID, out IIdentifiers identifiers);
-        Player GetData(int id);
+        IPlayer AddPlayer(int teamID, out IIdentifiers identifiers);
+        IPlayer GetData(int id);
         void RemovePlayer(int ID);
         void Clear();
     }

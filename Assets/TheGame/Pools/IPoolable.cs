@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System;
+using System.Collections.Generic;
 
 namespace TheGame
 {
@@ -18,10 +18,10 @@ namespace TheGame
         IModule Lobby { get; }
     }
 
-    //public interface IShip : IPoolable
-    //{
-    //    void Initialize(IIdentifiers identifiers, IControl control);
-    //}
+    public interface IMothershipUI : IPoolable
+    {
+        void Initialize(IPlayer player, List<IModule> mothershipModules);
+    }
 
     public interface IProjectiles : IPoolable
     {

@@ -21,6 +21,7 @@ namespace TheGame.UI
             description.text = module.Info.Description;
             this.module = module;
             button.onClick.AddListener(OnClick);
+            gameObject.SetActive(true);
         }
 
         private void OnClick()

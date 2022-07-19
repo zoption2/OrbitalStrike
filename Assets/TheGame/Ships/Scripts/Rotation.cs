@@ -13,7 +13,7 @@ namespace TheGame
             control.action += Rotate;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             control.action -= Rotate;
         }

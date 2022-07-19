@@ -6,8 +6,7 @@ namespace TheGame
     public class MotherShip : Ship, IMothership
     {
         [SerializeField] private MothershipLobby lobby;
-        [SerializeField] private MothershipUI mothershipUI;
-
+        private List<IModule> modules;
         public override ShipType ShipType => ShipType.mothership;
 
         public IModule CaptainsBridge { get => this; }
@@ -15,9 +14,11 @@ namespace TheGame
 
         public override void OnCreate()
         {
-            mothershipUI.AddModule(this);
-            mothershipUI.AddModule(Lobby);
-            lobby.SetUI(mothershipUI);
+            modules = new List<IModule>();
+            modules.Add(this);
+            modules.Add(lobby);
+
+            lobby.SetAllModules(modules);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace TheGame
 
         public override ShipType ShipType => ShipType.jetFighter;
 
-        public override void InitModule(Player player)
+        public override void InitModule(IPlayer player)
         {
             base.InitModule(player);
             rotation.Init(control.OnRotation);

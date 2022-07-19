@@ -3,7 +3,7 @@ using Cinemachine;
 
 namespace TheGame
 {
-    public class CameraController : MonoBehaviour
+    public class CameraController : MonoBehaviour, ICameraControl
     {
         [SerializeField] private Camera playCamera;
         [SerializeField] private Canvas canvas;
@@ -11,7 +11,7 @@ namespace TheGame
 
         public Camera Camera => playCamera;
 
-        public void Init(Transform toFollow, int totalPlayers, int playerN)
+        public void InitCamera(Transform toFollow, int totalPlayers, int playerN)
         {
             virtualCamera.Follow = toFollow;
             virtualCamera.LookAt = toFollow;
@@ -27,11 +27,17 @@ namespace TheGame
             canvas.gameObject.layer = cameraSettings.playerLayer;
         }
 
-        public void SwitchTarget(Transform toFollow)
+        public void ChangeCameraTarget(Transform toFollow)
         {
             virtualCamera.Follow = toFollow;
             virtualCamera.LookAt = toFollow;
         }
+    }
+
+    public interface ICameraControl
+    {
+        Camera Camera { get; }
+        void ChangeCameraTarget(Transform toFollow);
     }
 
     public class PersonalCameraPreferences : MonoBehaviour

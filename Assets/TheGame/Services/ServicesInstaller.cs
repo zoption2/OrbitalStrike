@@ -1,6 +1,7 @@
 using Zenject;
 using TheGame;
 using UnityEngine;
+using System.Collections.Generic;
 
 
 public partial class ServicesInstaller : MonoInstaller
@@ -22,6 +23,7 @@ public partial class ServicesInstaller : MonoInstaller
         Container.BindFactory<System.Action<RoutinePhase>, ControlledRoutine, ControlledRoutine.Factory>();
         Container.BindFactory<int, ControlledRoutine.Factory, Control, Control.Factory>();
         Container.Bind<IControlFactory>().To<ControlFactory>().AsSingle();
+        Container.BindFactory<ControlEvent<RoutinePhase>, IPlayer, List<IModule>, ControlUI, ControlUI.Factory>();
     }
 
     private void BindMonoServices()
@@ -49,5 +51,6 @@ public partial class ServicesInstaller : MonoInstaller
         Container.Bind<IRocketFactory>().FromInstance(reference.RocketFactory).AsSingle();
         Container.Bind<IMachineGunFactory>().FromInstance(reference.MachineGunFactory).AsSingle();
         Container.Bind<IShipFactory>().FromInstance(reference.ShipFactory).AsSingle();
+        Container.Bind<IMothershipUIFactory>().FromInstance(reference.MothershipUIFactory).AsSingle();
     }
 }

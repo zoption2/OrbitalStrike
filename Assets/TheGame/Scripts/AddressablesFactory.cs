@@ -27,6 +27,39 @@ namespace TheGame
             }
         }
 
+        public async Task<T1> GetPrefab(T2 type)
+        {
+            if (loaded.ContainsKey(type))
+            {
+                return loaded[type];
+            }
+            for (int i = 0, j = data.Length; i < j; i++)
+            {
+                if (data[i].Type.Equals(type))
+                {
+                    AsyncOperationHandle<GameObject> opHandle = Addressables.LoadAssetAsync<GameObject>(data[i].referance);
+                    await opHandle.Task;
+                    if (opHandle.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        if (opHandle.Result.TryGetComponent(out T1 product))
+                        {
+                            if (!loaded.ContainsKey(type))
+                            {
+                                loaded.Add(type, product);
+                            }
+                            return loaded[type];
+                        }
+                        else
+                        {
+                            throw new MissingComponentException();
+                        }
+                    }
+                }
+            }
+
+            throw new System.ArgumentNullException();
+        }
+
         private async void Load(T2 type, Action<T1> callback, Action failback)
         {
             if (loaded.ContainsKey(type))
@@ -107,7 +140,7 @@ namespace TheGame
     {
         T1 TryGetPrefab(T2 type, Action<T1> succes, Action failback = null);
         Task Preload(T2 type);
-        //Task<T1> Get(T2 type);
+        Task<T1> GetPrefab(T2 type);
     }
 }
 

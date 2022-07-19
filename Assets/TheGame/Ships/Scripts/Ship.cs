@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System;
+using System.Collections.Generic;
 using TheGame.AI;
 using Zenject;
 
@@ -43,10 +43,10 @@ namespace TheGame
             //notify
         }
 
-        public virtual void InitModule(Player player)
+        public virtual void InitModule(IPlayer player)
         {
-            identifiers = player.identifiers;
-            control = player.control;
+            identifiers = player.Identifiers;
+            control = player.Control;
             isMobuleBusy = true;
         }
 
@@ -66,7 +66,7 @@ namespace TheGame
             control.Disable();
         }
 
-        public virtual void LeaveModule(Player identifiers)
+        public virtual void LeaveModule(IPlayer identifiers)
         {
             isMobuleBusy = false;
         }
@@ -125,7 +125,7 @@ namespace TheGame
 
     public interface IMothershipComponent
     {
-        void SetUI(MothershipUI ui);
+        void SetAllModules(List<IModule> modules);
     }
 }
 

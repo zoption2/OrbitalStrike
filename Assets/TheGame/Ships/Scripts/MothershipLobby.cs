@@ -1,24 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Zenject;
 
 namespace TheGame
 {
     public class MothershipLobby : MonoBehaviour, IModule, IMothershipComponent
     {
         [field: SerializeField] public ModuleInfo Info { get; private set; }
-        private Dictionary<Player, IControl> players = new Dictionary<Player, IControl>();
+        private Dictionary<IPlayer, IControl> players = new Dictionary<IPlayer, IControl>();
         private const int maxPlayersInside = 4;
         private int currentPlayersInside;
-        private MothershipUI mothershipUI;
+        private List<IModule> modules;
+        [Inject] private ControlUI.Factory uiFactory;
 
         private List<ControlUI> controlledUI = new List<ControlUI>();
 
-        public void InitModule(Player player)
+        public void InitModule(IPlayer player)
         {
             if (!players.ContainsKey(player))
             {
-                players.Add(player, player.control);
-                controlledUI.Add(new ControlUI(player.control.OnSecondaryWeapon, mothershipUI, player));
+                players.Add(player, player.Control);
+                player.Module = this;
+                var ui = uiFactory.Create(player.Control.OnSecondaryWeapon, player, modules);
+                controlledUI.Add(ui);
             }
         }
 
@@ -27,7 +31,7 @@ namespace TheGame
             return currentPlayersInside < maxPlayersInside;
         }
 
-        public void LeaveModule(Player player)
+        public void LeaveModule(IPlayer player)
         {
             if (players.ContainsKey(player))
             {
@@ -36,9 +40,9 @@ namespace TheGame
             }
         }
 
-        public void SetUI(MothershipUI ui)
+        public void SetAllModules(List<IModule> modules)
         {
-            mothershipUI = ui;
+            this.modules = modules;
         }
 
         public void OnCreate()
@@ -56,21 +60,43 @@ namespace TheGame
             
         }
 
-        public class ControlUI
+
+    }
+
+
+    public class ControlUI
+    {
+        [Inject] private IPoolController poolController;
+        [Inject] private IMothershipUIFactory uiFactory;
+
+        private IPlayer player;
+        private List<IModule> all;
+
+        public ControlUI(ControlEvent<RoutinePhase> controlEvent, IPlayer player, List<IModule> all)
         {
-            private MothershipUI ui;
-            public ControlUI(ControlEvent<RoutinePhase> controlEvent, MothershipUI ui, Player player)
+            this.player = player;
+            this.all = all;
+            controlEvent.action += ShowUI;
+        }
+
+        private async void ShowUI(RoutinePhase phase)
+        {
+            if(phase == RoutinePhase.complete)
             {
-                this.ui = Instantiate(ui);
-                ui.Initialize(player.identifiers, player.cameraController.Camera, player.control);
-                controlEvent.action += ShowUI;
+                var waiter = uiFactory.GetPrefab(UIType.mothershipUI);
+                await waiter;
+                var uiPrefab = waiter.Result;
+
+                var ui = (IMothershipUI)poolController.Get(UIType.mothershipUI, Vector2.zero, Quaternion.identity, uiPrefab);
+                ui.Initialize(player, all);
             }
 
-            private void ShowUI(RoutinePhase phase)
-            {
-                ui.Show();
-            }
         }
-    } 
+
+        public class Factory : PlaceholderFactory<ControlEvent<RoutinePhase>, IPlayer, List<IModule>, ControlUI>
+        {
+
+        }
+    }
 }
 
