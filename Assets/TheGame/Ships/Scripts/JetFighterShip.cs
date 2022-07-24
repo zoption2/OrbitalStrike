@@ -10,12 +10,12 @@ namespace TheGame
 
         public override ShipType ShipType => ShipType.jetFighter;
 
-        public override void InitModule(IPlayer player)
+        public override void JoinModule(IPlayer player)
         {
-            base.InitModule(player);
-            rotation.Init(control.OnRotation);
-            gunController.Init(identifiers, MachineGunType.simpleGun, control.OnPrimeWeapon);
-            rocketController.Init(identifiers, RocketType.autoAimAntiShip, control.OnSecondaryWeapon);
+            base.JoinModule(player);
+            rotation.Init(control.OnLeftStickUse);
+            gunController.Init(identifiers, MachineGunType.simpleGun, control.OnRightTriggerUse);
+            rocketController.Init(identifiers, RocketType.autoAimAntiShip, control.OnAButton);
             health.Init(identifiers);
         }
     }

@@ -32,10 +32,10 @@ namespace TheGame
         public event Action OnTrapsComplete;
 
 
-        public event Action OnMoveUpPressed;
-        public event Action OnMoveDownPressed;
-        public event Action OnEnterPressed;
-        public event Action OnBackPressed;
+        public event Action OnMoveDPadStart;
+        public event Action OnMoveDPadComplete;
+
+
 
 
         public InputAction PrimeWeaponAction { get; private set; }
@@ -47,10 +47,8 @@ namespace TheGame
         public InputAction TurboAction { get; private set; }
         public InputAction TrapsAction { get; private set; }
 
-        public InputAction MoveUp { get; private set; }
-        public InputAction MoveDown { get; private set; }
-        public InputAction Enter { get; private set; }
-        public InputAction Back { get; private set; }
+        public InputAction MoveDPad { get; private set; }
+
 
         private const string rotation = "Rotation";
         private const string aim = "Aim";
@@ -61,10 +59,8 @@ namespace TheGame
         private const string breaks = "Breaks";
         private const string traps = "Traps";
 
-        private const string moveUp = "MoveUp";
-        private const string moveDown = "MoveDown";
-        private const string enter = "Enter";
-        private const string back = "Back";
+        private const string dPad = "DPad";
+
 
         public ControlActions(PlayerInput input)
         {
@@ -114,21 +110,10 @@ namespace TheGame
             TrapsAction.Enable();
 
 
-            MoveUp = Input.actions[moveUp];
-            MoveUp.started += ctx => OnMoveUpPressed?.Invoke();
-            MoveUp.Enable();
-
-            MoveDown = Input.actions[moveDown];
-            MoveDown.started += ctx => OnMoveDownPressed?.Invoke();
-            MoveDown.Enable();
-
-            Enter = Input.actions[enter];
-            Enter.started += ctx => OnEnterPressed?.Invoke();
-            Enter.Enable();
-
-            Back = Input.actions[back];
-            Back.started += ctx => OnBackPressed?.Invoke();
-            Back.Enable();
+            MoveDPad = Input.actions[dPad];
+            MoveDPad.started += ctx => OnMoveDPadStart?.Invoke();
+            MoveDPad.canceled += ctx => OnMoveDPadComplete?.Invoke();
+            MoveDPad.Enable();
         }
     }
 }

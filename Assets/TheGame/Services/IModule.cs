@@ -2,12 +2,13 @@
 
 namespace TheGame
 {
-    public interface IModule : IPoolable
+    public interface IModule : IPoolable, IControlled
     {
         bool IsAvailable();
         ModuleInfo Info { get; }
-        void InitModule(IPlayer player);
-        void LeaveModule(IPlayer identifiers);
+        CameraPrefs CameraPrefs { get; }
+        void JoinModule(IPlayer player);
+        void LeaveModule(IPlayer player);
     }
 
     [System.Serializable]
@@ -18,16 +19,10 @@ namespace TheGame
         [field: SerializeField] public string Description;
     }
 
-    public class Extensions
+    [System.Serializable]
+    public class CameraPrefs
     {
-        public static void ChangeModule(IModule current, IModule changeTo, IPlayer player)
-        {
-            if (changeTo.IsAvailable())
-            {
-                current.LeaveModule(player);
-                changeTo.InitModule(player);
-            }
-        }
+        [field: SerializeField] public float OrthoSize = 30f;
     }
 }
 

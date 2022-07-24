@@ -22,22 +22,24 @@ namespace TheGame
         private ControlledRoutine controlledBreaks;
         private ControlledRoutine controlledTraps;
 
-        private ControlledRoutine controlledDownPressed;
-        private ControlledRoutine controlledUpPressed;
+        private ControlledRoutine controlledDPad;
 
         private ControlledRoutine.Factory factory;
 
-        public ControlEvent<Vector2, RoutinePhase> OnRotation { get; } = new ControlEvent<Vector2, RoutinePhase>();
-        public ControlEvent<Vector2, RoutinePhase> OnAim { get; } = new ControlEvent<Vector2, RoutinePhase>();
-        public ControlEvent<RoutinePhase> OnPrimeWeapon { get; } = new ControlEvent<RoutinePhase>();
-        public ControlEvent<RoutinePhase> OnSecondaryWeapon { get; } = new ControlEvent<RoutinePhase>();
-        public ControlEvent<RoutinePhase> OnAdvanced { get; } = new ControlEvent<RoutinePhase>();
-        public ControlEvent<RoutinePhase> OnTurbo { get; } = new ControlEvent<RoutinePhase>();
-        public ControlEvent<RoutinePhase> OnBreaks { get; } = new ControlEvent<RoutinePhase>();
-        public ControlEvent<RoutinePhase> OnTraps { get; } = new ControlEvent<RoutinePhase>();
+        private const string SHIP_MAP = "ShipControl";
+        private const string UI_MAP = "UIControl";
 
-        public ControlEvent<RoutinePhase> OnUpPressed { get; } = new ControlEvent<RoutinePhase>();
-        public ControlEvent<RoutinePhase> OnDownPressed { get; } = new ControlEvent<RoutinePhase>();
+        public ControlEvent<Vector2, RoutinePhase> OnLeftStickUse { get; } = new ControlEvent<Vector2, RoutinePhase>();
+        public ControlEvent<Vector2, RoutinePhase> OnRightStickUse { get; } = new ControlEvent<Vector2, RoutinePhase>();
+        public ControlEvent<RoutinePhase> OnRightTriggerUse { get; } = new ControlEvent<RoutinePhase>();
+        public ControlEvent<RoutinePhase> OnAButton { get; } = new ControlEvent<RoutinePhase>();
+        public ControlEvent<RoutinePhase> OnYButton { get; } = new ControlEvent<RoutinePhase>();
+        public ControlEvent<RoutinePhase> OnBButton { get; } = new ControlEvent<RoutinePhase>();
+        public ControlEvent<RoutinePhase> OnXButton { get; } = new ControlEvent<RoutinePhase>();
+        public ControlEvent<RoutinePhase> OnRightShoulder { get; } = new ControlEvent<RoutinePhase>();
+
+        public ControlEvent<Vector2, RoutinePhase> OnMoveDPad { get; } = new ControlEvent<Vector2, RoutinePhase>();
+
 
 
         public Control(int id, ControlledRoutine.Factory factory)
@@ -62,10 +64,22 @@ namespace TheGame
                 controlledTraps = factory.Create(UseTraps);
                 controlledTurbo = factory.Create(UseTurbo);
 
-                controlledUpPressed = factory.Create(MoveUp);
-                controlledDownPressed = factory.Create(MoveDown);
+                controlledDPad = factory.Create(MoveUp);
 
                 SubscribeActions();
+            }
+        }
+
+        public void ChangeActionMap(ActionMapType actionMap)
+        {
+            switch (actionMap)
+            {
+                case ActionMapType.ship:
+                    playerInput.defaultActionMap = SHIP_MAP;
+                    break;
+                case ActionMapType.ui:
+                    playerInput.defaultActionMap = UI_MAP;
+                    break;
             }
         }
 
@@ -76,52 +90,47 @@ namespace TheGame
 
         private void DoRotation(RoutinePhase phase)
         {
-            OnRotation.action?.Invoke(input.RotationAction.ReadValue<Vector2>(), phase);
+            OnLeftStickUse.action?.Invoke(input.RotationAction.ReadValue<Vector2>(), phase);
         }
 
         private void DoAim(RoutinePhase phase)
         {
-            OnAim.action?.Invoke(input.AimAction.ReadValue<Vector2>(), phase);
+            OnRightStickUse.action?.Invoke(input.AimAction.ReadValue<Vector2>(), phase);
         }
 
         private void UsePrimeWeapon(RoutinePhase phase)
         {
-            OnPrimeWeapon.action?.Invoke(phase);
+            OnRightTriggerUse.action?.Invoke(phase);
         }
 
         private void UseSecondaryWeapon(RoutinePhase phase)
         {
-            OnSecondaryWeapon.action?.Invoke(phase);
+            OnAButton.action?.Invoke(phase);
         }
 
         private void UseAdvanced(RoutinePhase phase)
         {
-            OnAdvanced.action?.Invoke(phase);
+            OnYButton.action?.Invoke(phase);
         }
 
         private void UseTraps(RoutinePhase phase)
         {
-            OnTraps.action?.Invoke(phase);
+            OnRightShoulder.action?.Invoke(phase);
         }
 
         private void UseTurbo(RoutinePhase phase)
         {
-            OnTurbo.action?.Invoke(phase);
+            OnBButton.action?.Invoke(phase);
         }
 
         private void UseBreaks(RoutinePhase phase)
         {
-            OnBreaks.action?.Invoke(phase);
+            OnXButton.action?.Invoke(phase);
         }
 
         private void MoveUp(RoutinePhase phase)
         {
-            OnUpPressed.action?.Invoke(phase);
-        }
-
-        private void MoveDown(RoutinePhase phase)
-        {
-            OnDownPressed.action?.Invoke(phase);
+            OnMoveDPad.action?.Invoke(input.MoveDPad.ReadValue<Vector2>(), phase);
         }
 
 
@@ -150,6 +159,9 @@ namespace TheGame
 
             input.OnBreaksStart += controlledBreaks.Start;
             input.OnBreaksComplete += controlledBreaks.Cancel;
+
+            input.OnMoveDPadStart += controlledDPad.Start;
+            input.OnMoveDPadComplete += controlledDPad.Cancel;
         }
 
         private void UnsubscribeActions()
@@ -177,6 +189,9 @@ namespace TheGame
 
             input.OnBreaksStart -= controlledBreaks.Start;
             input.OnBreaksComplete -= controlledBreaks.Cancel;
+
+            input.OnMoveDPadStart -= controlledDPad.Start;
+            input.OnMoveDPadComplete -= controlledDPad.Cancel;
         }
 
         public class Factory : PlaceholderFactory<int, ControlledRoutine.Factory, Control>
@@ -185,6 +200,11 @@ namespace TheGame
         }
     }
 
+    public enum ActionMapType
+    {
+        ship,
+        ui
+    }
 
     public interface IControlFactory
     {

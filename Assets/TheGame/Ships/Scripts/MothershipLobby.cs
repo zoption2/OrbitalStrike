@@ -4,98 +4,30 @@ using Zenject;
 
 namespace TheGame
 {
-    public class MothershipLobby : MonoBehaviour, IModule, IMothershipComponent
+    public class MothershipLobby : MothershipModule
     {
-        [field: SerializeField] public ModuleInfo Info { get; private set; }
-        private Dictionary<IPlayer, IControl> players = new Dictionary<IPlayer, IControl>();
-        private const int maxPlayersInside = 4;
-        private int currentPlayersInside;
-        private List<IModule> modules;
-        [Inject] private ControlUI.Factory uiFactory;
+        private List<IPlayer> players = new List<IPlayer>();
 
-        private List<ControlUI> controlledUI = new List<ControlUI>();
-
-        public void InitModule(IPlayer player)
+        public override bool IsAvailable()
         {
-            if (!players.ContainsKey(player))
+            return true;
+        }
+
+        public override void JoinModule(IPlayer player)
+        {
+            if(!players.Contains(player))
             {
-                players.Add(player, player.Control);
-                player.Module = this;
-                var ui = uiFactory.Create(player.Control.OnSecondaryWeapon, player, modules);
-                controlledUI.Add(ui);
+                players.Add(player);
+                player.CameraControl.ChangeCameraTarget(this.transform);
             }
         }
 
-        public bool IsAvailable()
+        public override void LeaveModule(IPlayer player)
         {
-            return currentPlayersInside < maxPlayersInside;
-        }
-
-        public void LeaveModule(IPlayer player)
-        {
-            if (players.ContainsKey(player))
+            if (players.Contains(player))
             {
                 players.Remove(player);
-                currentPlayersInside--;
             }
-        }
-
-        public void SetAllModules(List<IModule> modules)
-        {
-            this.modules = modules;
-        }
-
-        public void OnCreate()
-        {
-            
-        }
-
-        public void OnRestore()
-        {
-            
-        }
-
-        public void OnStore()
-        {
-            
-        }
-
-
-    }
-
-
-    public class ControlUI
-    {
-        [Inject] private IPoolController poolController;
-        [Inject] private IMothershipUIFactory uiFactory;
-
-        private IPlayer player;
-        private List<IModule> all;
-
-        public ControlUI(ControlEvent<RoutinePhase> controlEvent, IPlayer player, List<IModule> all)
-        {
-            this.player = player;
-            this.all = all;
-            controlEvent.action += ShowUI;
-        }
-
-        private async void ShowUI(RoutinePhase phase)
-        {
-            if(phase == RoutinePhase.complete)
-            {
-                var waiter = uiFactory.GetPrefab(UIType.mothershipUI);
-                await waiter;
-                var uiPrefab = waiter.Result;
-
-                var ui = (IMothershipUI)poolController.Get(UIType.mothershipUI, Vector2.zero, Quaternion.identity, uiPrefab);
-                ui.Initialize(player, all);
-            }
-
-        }
-
-        public class Factory : PlaceholderFactory<ControlEvent<RoutinePhase>, IPlayer, List<IModule>, ControlUI>
-        {
-
         }
     }
 }

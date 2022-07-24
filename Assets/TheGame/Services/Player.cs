@@ -5,6 +5,7 @@ namespace TheGame
     public class Player : MonoBehaviour, IPlayer
     {
         [SerializeField] private CameraController cameraController;
+        [SerializeField] private MultiplayerUIController multiplayerSystem;
         private IIdentifiers identifiers;
         private IControl control;
         private IModule module;
@@ -14,6 +15,7 @@ namespace TheGame
         public ICameraControl CameraControl => cameraController;
         public IControl Control => control;
         public IModule Module { get => module; set => module = value; }
+        public IMultiplayerUI MultiplayerUI => multiplayerSystem;
 
         public void SetIdentifiers(IIdentifiers identifiers)
         {
@@ -42,6 +44,7 @@ namespace TheGame
         ICameraControl CameraControl { get; }
         IControl Control { get; }
         IModule Module { get; set; }
+        IMultiplayerUI MultiplayerUI { get; }
     }
 }
 

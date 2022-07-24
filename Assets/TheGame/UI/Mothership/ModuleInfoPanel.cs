@@ -14,6 +14,9 @@ namespace TheGame.UI
         [SerializeField] private Button button;
         private IModule module;
 
+        public Button Button => button;
+        public System.Action<IModule> OnPressed;
+
         public void Setup(IModule module)
         {
             image.sprite = module.Info.Icon;
@@ -26,7 +29,7 @@ namespace TheGame.UI
 
         private void OnClick()
         {
-
+            OnPressed?.Invoke(module);
         }
     }
 }

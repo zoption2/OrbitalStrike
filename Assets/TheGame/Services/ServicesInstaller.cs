@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public partial class ServicesInstaller : MonoInstaller
 {
     [SerializeField] private MonoReferences reference;
+    [SerializeField] private PopupReferencesAddressable popupRef;
     [SerializeField] private OnlevelHelper onlevelHelper;
 
 
@@ -16,6 +17,7 @@ public partial class ServicesInstaller : MonoInstaller
         BindMonoServices();
         BindServices();
         BindPlayerControl();
+        BindPopups();
     }
 
     private void BindPlayerControl()
@@ -51,6 +53,12 @@ public partial class ServicesInstaller : MonoInstaller
         Container.Bind<IRocketFactory>().FromInstance(reference.RocketFactory).AsSingle();
         Container.Bind<IMachineGunFactory>().FromInstance(reference.MachineGunFactory).AsSingle();
         Container.Bind<IShipFactory>().FromInstance(reference.ShipFactory).AsSingle();
-        Container.Bind<IMothershipUIFactory>().FromInstance(reference.MothershipUIFactory).AsSingle();
+        //Container.Bind<IMothershipUIFactory>().FromInstance(reference.MothershipUIFactory).AsSingle();
+        Container.Bind<IPopupReferences>().FromInstance(popupRef).AsSingle();
+    }
+
+    private void BindPopups()
+    {
+        Container.Bind<MothershipPopupProvider>().To<MothershipPopupProvider>().AsTransient();
     }
 }

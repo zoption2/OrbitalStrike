@@ -12,7 +12,6 @@ namespace TheGame
     {
         [SerializeField] private Data<T2>[] data;
         private Dictionary<T2, T1> loaded = new Dictionary<T2, T1>();
-        //private AsyncOperationHandle<GameObject> opHandle;
 
         public T1 TryGetPrefab(T2 type, Action<T1> succes, Action failback = null)
         {

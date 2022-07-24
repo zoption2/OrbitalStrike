@@ -10,7 +10,7 @@ namespace TheGame
         public void Init(ControlEvent<Vector2, RoutinePhase> control)
         {
             this.control = control;
-            control.action += Rotate;
+            this.control.action += Rotate;
         }
 
         private void OnDisable()

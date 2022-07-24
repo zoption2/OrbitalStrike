@@ -12,15 +12,10 @@ namespace TheGame
         void OnStore();
     }
 
-    public interface IMothership : IPoolable
+    public interface IMothership : IModule
     {
         IModule CaptainsBridge { get; }
         IModule Lobby { get; }
-    }
-
-    public interface IMothershipUI : IPoolable
-    {
-        void Initialize(IPlayer player, List<IModule> mothershipModules);
     }
 
     public interface IProjectiles : IPoolable

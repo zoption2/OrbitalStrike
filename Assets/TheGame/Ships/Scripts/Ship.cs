@@ -10,6 +10,7 @@ namespace TheGame
         [SerializeField] protected Health health;
         [SerializeField] protected Rotation rotation;
         [field: SerializeField] public ModuleInfo Info { get; private set; }
+        [field: SerializeField] public CameraPrefs CameraPrefs { get; private set; }
 
         protected IIdentifiers identifiers;
         protected IControl control;
@@ -18,7 +19,9 @@ namespace TheGame
 
         public int TeamID { get => identifiers.TeamID; }
         public abstract ShipType ShipType { get; }
-        protected bool isMobuleBusy;
+
+        private bool isControlActive;
+        private bool isModuleAvailable;
 
 
         [Inject]
@@ -28,9 +31,9 @@ namespace TheGame
             this.playersService = playersService;
         }
 
-        public bool IsAvailable()
+        public virtual bool IsAvailable()
         {
-            return isMobuleBusy;
+            return isModuleAvailable;
         }
 
         public ITargetable GetTarget()
@@ -43,53 +46,43 @@ namespace TheGame
             //notify
         }
 
-        public virtual void InitModule(IPlayer player)
+        public virtual void JoinModule(IPlayer player)
         {
             identifiers = player.Identifiers;
             control = player.Control;
-            isMobuleBusy = true;
+            EnableControl();
         }
 
 
         public virtual void OnCreate()
         {
-            //control = controlFactory.Get(identifiers);
+            isModuleAvailable = true;
         }
 
         public virtual void OnRestore()
         {
-            //control = controlFactory.Get(identifiers);
+            isModuleAvailable = true;
         }
 
         public virtual void OnStore()
         {
-            control.Disable();
+            
         }
 
         public virtual void LeaveModule(IPlayer identifiers)
         {
-            isMobuleBusy = false;
+            DisableControl();
+            isModuleAvailable = true;
         }
-    }
 
-    public interface IIdentifiers
-    {
-        int ID { get; }
-        int TeamID { get; }
-        PlayerType PlayerType { get; }
-    }
-
-    public struct Identifiers : IIdentifiers
-    {
-        public int ID { get; private set; }
-        public int TeamID { get; private set; }
-        public PlayerType PlayerType { get; private set; }
-
-        public Identifiers(int id, int teamID, PlayerType playerType = PlayerType.human)
+        public virtual void EnableControl(IPlayer player = null)
         {
-            ID = id;
-            TeamID = teamID;
-            PlayerType = playerType;
+            isControlActive = true;
+        }
+
+        public virtual void DisableControl(IPlayer player = null)
+        {
+            isControlActive = false;
         }
     }
 
@@ -108,24 +101,24 @@ namespace TheGame
 
     public interface IControl
     {
-        public ControlEvent<Vector2, RoutinePhase> OnRotation { get;}
-        public ControlEvent<Vector2, RoutinePhase> OnAim { get;}
-        public ControlEvent<RoutinePhase> OnPrimeWeapon { get;}
-        public ControlEvent<RoutinePhase> OnSecondaryWeapon { get;}
-        public ControlEvent<RoutinePhase> OnAdvanced { get;}
-        public ControlEvent<RoutinePhase> OnTurbo { get;}
-        public ControlEvent<RoutinePhase> OnBreaks { get;}
-        public ControlEvent<RoutinePhase> OnTraps { get;}
+        public ControlEvent<Vector2, RoutinePhase> OnLeftStickUse { get;}
+        public ControlEvent<Vector2, RoutinePhase> OnRightStickUse { get;}
+        public ControlEvent<RoutinePhase> OnRightTriggerUse { get;}
+        public ControlEvent<RoutinePhase> OnAButton { get;}
+        public ControlEvent<RoutinePhase> OnYButton { get;}
+        public ControlEvent<RoutinePhase> OnBButton { get;}
+        public ControlEvent<RoutinePhase> OnXButton { get;}
+        public ControlEvent<RoutinePhase> OnRightShoulder { get;}
 
-        public ControlEvent<RoutinePhase> OnDownPressed { get; }
-        public ControlEvent<RoutinePhase> OnUpPressed { get; }
+        public ControlEvent<Vector2, RoutinePhase> OnMoveDPad { get; }
 
-        public void Disable();
+        public void ChangeActionMap(ActionMapType actionMap);
     }
 
-    public interface IMothershipComponent
+    public interface IControlled
     {
-        void SetAllModules(List<IModule> modules);
+        void EnableControl(IPlayer player = null);
+        void DisableControl(IPlayer player = null);
     }
 }
 
